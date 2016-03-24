@@ -1,0 +1,19 @@
+#!/bin/bash
+
+export KUBELET_OPTS=" \
+  --address=0.0.0.0 \
+  --allow-privileged=false \
+  --alsologtostderr=false \
+  --api-servers=127.0.0.1:8080 \
+  --config="/vagrant/kubelet/manifests" \
+  --container-runtime="docker" \
+  --enable-server=true \
+  --file-check-frequency=30s \
+  --http-check-frequency=30s \
+  --node-status-update-frequency=1m \
+  --log-dir="/vagrant/kubelet/logs/${HOSTNAME}" \
+  --log-flush-frequency=5s \
+  --read-only-port=10255 \
+  --register-node=false \
+  --sync-frequency=10s \
+  --v=2 "
