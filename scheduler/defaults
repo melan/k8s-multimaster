@@ -1,0 +1,11 @@
+#!/bin/bash
+
+HOSTNAME=$(/bin/hostname)
+
+export KUBE_SCHEDULER_OPTS="
+  --master=127.0.0.1:8080 \
+  --v=4 \
+  --log-dir='/var/log/kube/${HOSTNAME}' \
+  --logtostderr=false \
+  --alsologtostderr=true \
+  --leader-elect=true "

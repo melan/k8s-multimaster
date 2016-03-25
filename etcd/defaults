@@ -1,0 +1,14 @@
+#!/bin/bash
+
+IP=$(ifconfig eth1 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+HOSTNAME=$(/bin/hostname)
+LOGFILE="/vagrant/etcd/logs/${HOSTNAME}/etcd.log"
+
+export ETCD_DATA_DIR="/vagrant/etcd/data/${HOSTNAME}"
+export ETCD_NAME="${HOSTNAME}"
+export ETCD_INITIAL_ADVERTISE_PEER_URLS="http://${IP}:2380"
+export ETCD_LISTEN_PEER_URLS="http://${IP}:2380"
+export ETCD_LISTEN_CLIENT_URLS="http://${IP}:2379,http://127.0.0.1:2379"
+export ETCD_ADVERTISE_CLIENT_URLS="http://${IP}:2379"
+export ETCD_INITIAL_CLUSTER="k8s-master01=http://172.28.128.101:2380,k8s-master02=http://172.28.128.102:2380,k8s-master03=http://172.28.128.103:2380"
+export ETCD_INITIAL_CLUSTER_STATE="new"
