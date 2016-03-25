@@ -1,8 +1,10 @@
 #!/bin/bash
 
 HOSTNAME=$(/bin/hostname)
+IP=$(ifconfig eth1 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
 
-export KUBE_APISERVER_OPTS="
+export KUBE_APISERVER_OPTS=" \
+  --apiserver-count=3 \
   --insecure-bind-address=0.0.0.0 \
   --insecure-port=8080 \
   --secure-port=0 \

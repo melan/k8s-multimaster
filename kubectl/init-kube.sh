@@ -72,7 +72,7 @@ export NUM_NODES=4
 ENABLE_CLUSTER_DNS="false"
 
 # Optional: Install Kubernetes UI
-ENABLE_CLUSTER_UI="true"
+ENABLE_CLUSTER_UI="false"
 
 # Optional: Enable setting flags for kube-apiserver to turn on behavior in active-dev
 #RUNTIME_CONFIG=""
@@ -90,3 +90,6 @@ pushd /opt/kubernetes/current/cluster/ubuntu/
 
 /opt/bin/kubectl create -f /vagrant/kubectl/skydns-rc.yaml
 /opt/bin/kubectl create -f /vagrant/kubectl/skydns-svc.yaml
+
+/opt/bin/kubectl create -f /vagrant/kubectl/dashboard-controller.yaml
+/opt/bin/kubectl create -f /vagrant/kubectl/dashboard-service.yaml
