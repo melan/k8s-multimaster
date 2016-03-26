@@ -8,4 +8,6 @@ export KUBE_CONTROLLER_MANAGER_OPTS="
   --log-dir='/var/log/kube/${HOSTNAME}' \
   --logtostderr=false \
   --v=4 \
+  --cloud-provider=mesos \
+  --cloud-config=/etc/mesos-cloud.conf \
   --leader-elect=true "

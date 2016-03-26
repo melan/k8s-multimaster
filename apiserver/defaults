@@ -8,11 +8,14 @@ export KUBE_APISERVER_OPTS=" \
   --insecure-bind-address=0.0.0.0 \
   --insecure-port=8080 \
   --secure-port=0 \
-  --etcd-servers=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379 \
+  --etcd-servers=http://k8s-master01:2379,http://k8s-master02:2379,http://k8s-master03:2379 \
   --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota \
   --service-cluster-ip-range=10.10.10.0/24 \
   --v=4 \
   --log-dir='/var/log/kube/${HOSTNAME}' \
   --logtostderr=false \
   --alsologtostderr=true \
-  --allow-privileged=false "
+  --allow-privileged=false \
+  --cloud-provider=mesos \
+  --cloud-config=/etc/mesos-cloud.conf
+  "

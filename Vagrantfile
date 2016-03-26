@@ -13,6 +13,7 @@ def run_scripts(config, scripts_folder)
     set -x
 
     /vagrant/scripts/common/01-install-packages.sh
+    /vagrant/scripts/#{scripts_folder}/01-install-packages.sh
     /vagrant/scripts/#{scripts_folder}/02-create-log-folders.sh
     /vagrant/scripts/#{scripts_folder}/03-stop-services.sh
     /vagrant/scripts/common/04-get-latest-kube.sh

@@ -8,4 +8,6 @@ export KUBE_SCHEDULER_OPTS="
   --log-dir='/var/log/kube/${HOSTNAME}' \
   --logtostderr=false \
   --alsologtostderr=true \
+  --cloud-provider=mesos \
+  --cloud-config=/etc/mesos-cloud.conf \
   --leader-elect=true "

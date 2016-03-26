@@ -6,3 +6,5 @@
 [[ -d "/vagrant/etcd/logs/${HOSTNAME}" ]] || mkdir -p "/vagrant/etcd/logs/${HOSTNAME}"
 [[ -d "/vagrant/etcd/data/${HOSTNAME}" ]] || mkdir -p "/vagrant/etcd/data/${HOSTNAME}"
 [[ -d "/vagrant/flanneld/logs/${HOSTNAME}" ]] || mkdir -p "/vagrant/flanneld/logs/${HOSTNAME}"
+[[ -d "/vagrant/zookeeper/logs/${HOSTNAME}" ]] || mkdir -p "/vagrant/zookeeper/logs/${HOSTNAME}"
+[[ -d "/vagrant/mesos-master/logs/${HOSTNAME}" ]] || mkdir -p "/vagrant/mesos-master/logs/${HOSTNAME}"
