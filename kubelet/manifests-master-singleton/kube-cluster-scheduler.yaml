@@ -10,6 +10,8 @@ spec:
     image: melan/kubernetes-mesos
     imagePullPolicy: IfNotPresent
     command:
+      - env
+      - LIBPROCESS_IP=`cat /etc/mesos/ip`
       - /usr/local/bin/km
       - scheduler
       - --address=0.0.0.0
