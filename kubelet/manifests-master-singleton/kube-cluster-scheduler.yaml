@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-cluster-scheduler
+  namespace: default
+spec:
+  hostNetwork: true
+  containers:
+  - name: kube-scheduler
+    image: melan/kubernetes-mesos
+    imagePullPolicy: IfNotPresent
+    command:
+      - /usr/local/bin/km
+      - scheduler
+      - --address=0.0.0.0
+      - --etcd-servers=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379
+      - --v=4
+      - --mesos-master=172.28.128.71:5050
+      - --mesos-user=root
+      - --api-servers=http://172.28.128.71:8080
+      - --advertised-address=172.28.128.71:10251
+      - --cluster-dns=10.10.10.10
+      - --cluster-domain=cluster.local
+      - --ha=false
+      - --v=10
+    livenessProbe:
+      httpGet:
+        host: 127.0.0.1
+        path: /healthz
+        port: 10251
+      initialDelaySeconds: 15
+      timeoutSeconds: 1
+

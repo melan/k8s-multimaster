@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-cluster-controller
+  namespace: default
+spec:
+  hostNetwork: true
+  containers:
+  - name: kube-controller-manager
+    image: melan/kubernetes-mesos
+    command:
+      - /usr/local/bin/km
+      - controller-manager
+      - --master=http://172.28.128.71:8080
+      - --v=4
+      - --cloud-provider=mesos
+      - --cloud-config=/etc/mesos-cloud.conf
+    volumeMounts:
+      - mountPath: /etc/mesos-cloud.conf
+        name: mesoscloudconf
+    livenessProbe:
+      httpGet:
+        host: 127.0.0.1
+        path: /healthz
+        port: 10252
+      initialDelaySeconds: 15
+      timeoutSeconds: 1
+  volumes:
+    - name: mesoscloudconf
+      hostPath:
+        path: /etc/mesos-cloud.conf
+

@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-cluster-master
+  namespace: default
+spec:
+  hostNetwork: true
+  containers:
+  - name: etcd
+    image: gcr.io/google_containers/etcd:2.2.1
+    command:
+      - /bin/sh
+      - -c
+      - . /etc/default/etcd; /usr/local/bin/etcd --data-dir=/var/etcd/data
+    volumeMounts:
+      - mountPath: /var/etcd
+        name: clustervaretcd
+      - mountPath: /etc/default/etcd
+        name: etcddefault
+  - name: kube-apiserver
+    image: melan/kubernetes-mesos
+    command:
+      - /usr/local/bin/km
+      - apiserver
+      - --insecure-bind-address=0.0.0.0
+      - --insecure-port=8080
+      - --secure-port=0
+      - --etcd-servers=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379
+      - --allow-privileged=true
+      - --service-cluster-ip-range=10.10.10.0/24
+      - --advertise-address=0.0.0.0
+      - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota
+      - --v=4
+      - --cloud-provider=mesos
+      - --cloud-config=/etc/mesos-cloud.conf
+    ports:
+    - containerPort: 8080
+      hostPort: 8080
+      name: local
+    volumeMounts:
+      - mountPath: /etc/mesos-cloud.conf
+        name: mesoscloudconf
+  # - name: kube-proxy
+  #   image: melan/kubernetes-mesos
+  #   command:
+  #     - /usr/local/bin/km
+  #     - proxy
+  #     - --master=http://127.0.0.1:8080
+  #   securityContext:
+  #     privileged: true
+  volumes:
+    - name: clustervaretcd
+      emptyDir: {}
+    - name: etcddefault
+      hostPath:
+        path: /etc/default/etcd
+    - name: mesoscloudconf
+      hostPath:
+        path: /etc/mesos-cloud.conf
+

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   name: kube-dns-v11
-  namespace: kube-system
+  namespace: default
   labels:
     k8s-app: kube-dns
     version: v11
@@ -55,8 +55,8 @@ spec:
         args:
         # command = "/kube2sky"
         - --domain=cluster.local
-        - --etcd-server=http://172.28.128.101:2379
-        - --kube-master-url=http://172.28.128.101:8080
+        - --etcd-server=http://172.28.128.71:2379
+        - --kube-master-url=http://172.28.128.71:8080
       - name: skydns
         image: gcr.io/google_containers/skydns:2015-10-13-8c72f8c
         resources:
@@ -72,7 +72,7 @@ spec:
             memory: 50Mi
         args:
         # command = "/skydns"
-        - -machines=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379
+        - -machines=http://172.28.128.71:2379
         - -addr=0.0.0.0:53
         - -ns-rotate=false
         - -domain=cluster.local.

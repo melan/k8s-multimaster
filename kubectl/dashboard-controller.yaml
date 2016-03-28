@@ -4,7 +4,7 @@ metadata:
   # Keep the name in sync with image version and
   # gce/coreos/kube-manifests/addons/dashboard counterparts
   name: kubernetes-dashboard-v1.0.0
-  namespace: kube-system
+  namespace: default
   labels:
     k8s-app: kubernetes-dashboard
     kubernetes.io/cluster-service: "true"
@@ -23,7 +23,7 @@ spec:
         image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.0.0
         args:
         # /dashboard
-        - --apiserver-host=http://172.28.128.101:8080
+        - --apiserver-host=http://172.28.128.71:8080
         resources:
           # keep request = limit to keep this container in guaranteed class
           limits:

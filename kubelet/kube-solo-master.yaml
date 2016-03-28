@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-solo-master
+  namespace: default
+spec:
+  hostNetwork: false
+  containers:
+  - name: etcd
+    image: gcr.io/google_containers/etcd:2.2.1
+    command:
+      - /usr/local/bin/etcd
+      - --listen-client-urls=http://127.0.0.1:2379
+      - --advertise-client-urls=http://127.0.0.1:2379
+      - --data-dir=/var/etcd/data
+    ports:
+      - containerPort: 2379
+        name: etcd-port
+    volumeMounts:
+      - mountPath: /var/etcd
+        name: varetcd
+  - name: kube-apiserver
+    image: gcr.io/google_containers/hyperkube:v1.2.0
+    command:
+      - /hyperkube
+      - apiserver
+      - --insecure-bind-address=0.0.0.0
+      - --insecure-port=8080
+      - --secure-port=0
+      - --etcd_servers=http://localhost:2379
+      - --allow-privileged=true
+      - --service-cluster-ip-range=10.10.10.0/24
+      - --advertise-address=127.0.0.1
+      - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota
+      - --v=4
+    ports:
+    - containerPort: 8080
+      hostPort: 8090
+      name: local
+  # - name: kube-proxy
+  #   image: gcr.io/google_containers/hyperkube:v1.2.0
+  #   command:
+  #     - /hyperkube
+  #     - proxy
+  #     - --master=http://127.0.0.1:8080
+  #   securityContext:
+  #     privileged: true
+  # - name: kube-controller-manager
+  #   image: gcr.io/google_containers/hyperkube:v1.2.0
+  #   command:
+  #     - /hyperkube
+  #     - controller-manager
+  #     - --master=http://127.0.0.1:8080
+  #   livenessProbe:
+  #     httpGet:
+  #       host: 127.0.0.1
+  #       path: /healthz
+  #       port: 10252
+  #     initialDelaySeconds: 15
+  #     timeoutSeconds: 1
+  # - name: kube-scheduler
+  #   image: gcr.io/google_containers/hyperkube:v1.2.0
+  #   command:
+  #     - /hyperkube
+  #     - scheduler
+  #     - --master=http://127.0.0.1:8080
+  #   livenessProbe:
+  #     httpGet:
+  #       host: 127.0.0.1
+  #       path: /healthz
+  #       port: 10251
+  #     initialDelaySeconds: 15
+  #     timeoutSeconds: 1
+  volumes:
+    - name: varetcd
+      emptyDir: {}

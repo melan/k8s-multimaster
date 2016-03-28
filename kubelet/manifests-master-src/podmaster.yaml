@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-podmaster
+  namespace: default
+spec:
+  hostNetwork: true
+  containers:
+  - name: scheduler-elector
+    image: gcr.io/google_containers/podmaster:1.1
+    command:
+    - /podmaster
+    - --etcd-servers=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379
+    - --key=scheduler
+    - --source-file=/src/manifests/kube-cluster-scheduler.yaml
+    - --dest-file=/dst/manifests/kube-cluster-scheduler.yaml
+    volumeMounts:
+    - mountPath: /src/manifests
+      name: manifest-src
+      readOnly: true
+    - mountPath: /dst/manifests
+      name: manifest-dst
+  - name: controller-elector
+    image: gcr.io/google_containers/podmaster:1.1
+    command:
+    - /podmaster
+    - --etcd-servers=http://172.28.128.101:2379,http://172.28.128.102:2379,http://172.28.128.103:2379
+    - --key=controller
+    - --source-file=/src/manifests/kube-cluster-controller.yaml
+    - --dest-file=/dst/manifests/kube-cluster-controller.yaml
+    volumeMounts:
+    - mountPath: /src/manifests
+      name: manifest-src
+      readOnly: true
+    - mountPath: /dst/manifests
+      name: manifest-dst
+  volumes:
+  - hostPath:
+      path: /vagrant/kubelet/manifests-master-singleton
+    name: manifest-src
+  - hostPath:
+      path: /etc/kubernetes/manifests
+    name: manifest-dst

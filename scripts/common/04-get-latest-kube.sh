@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/vagrant/kubernetes/get_kube.sh
+# /vagrant/kubernetes/get_kube.sh

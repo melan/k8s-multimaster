@@ -1,13 +1,12 @@
-
+K8S_VERSION=${K8S_VERSION:-1.2.0}
+# REGISTRY=${REGISTRY:-????}
 
 destroy:
 	vagrant destroy -f
 
 clean:
-	find */logs -type f -delete
-	find */logs -type l -delete
-
-	rm -rf etcd/data/k8s-master0?/member/*
+	find ./*/logs -type d | grep 'logs$$' | xargs -I{} /bin/bash -c "pushd {}; rm -rf ./*; popd"
+	rm -rf etcd/data/*
 
 recreate: destroy clean
 	vagrant up
@@ -17,3 +16,6 @@ stop:
 
 start:
 	vagrant up
+
+
+build_k8s:

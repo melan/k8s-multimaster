@@ -27,6 +27,21 @@ end
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
+  lb_instances = ["01"]
+  lb_instances.each do |x| 
+    hostname = "k8s-lb" + x
+    private_id = "172.28.128.7" + x.to_i.to_s
+
+    config.vm.define hostname do |host|
+      host.vm.hostname = hostname
+      host.vm.network "private_network", ip: private_id
+
+      scripts_folder = "lb"
+      run_scripts(host, scripts_folder)
+    end
+  end
+
+
   master_instances = ["01", "02", "03"]
 
   master_instances.each do |x| 

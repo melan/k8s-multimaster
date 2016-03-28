@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 IP=$(ifconfig eth1 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
 HOSTNAME=$(/bin/hostname)

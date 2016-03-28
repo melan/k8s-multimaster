@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-cluster-slave
+  namespace: kube-system
+spec:
+  hostNetwork: true
+  containers:
+    - name: mesos-slave
+      image: mesosphere/mesos-slave:0.28.0-2.0.16.ubuntu1404
+      env:
+        - name:  "MESOS_PORT"
+          value: "5051"
+        - name:  "MESOS_ZK"
+          value: "zk://172.28.128.101:2181,172.28.128.102:2181,172.28.128.103:2181/mesos"
+        - name:  "MESOS_SWITCH_USER"
+          value: "0"
+        - name:  "MESOS_CONTAINERIZERS"
+          value: "docker,mesos"
+        - name:  "MESOS_QUORUM"
+          value: "2"
+        - name:  "MESOS_REGISTRY"
+          value: "in_memory"
+        - name:  "MESOS_LOG_DIR"
+          value: "/var/log/mesos"
+        - name:  "MESOS_WORK_DIR"
+          value: "/var/tmp/mesos"
+      volumeMounts:
+        - mountPath: /var/log/mesos
+          name: mesoslogs
+        - mountPath: /var/tmp/mesos
+          name: mesoswork
+  volumes:
+    - name: mesoswork
+      emptyDir: {}
+    - name: mesoslogs
+      emptyDir: {}

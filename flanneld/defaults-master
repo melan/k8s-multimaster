@@ -1,0 +1,14 @@
+#!/bin/bash
+
+HOSTNAME=$(/bin/hostname)
+IP=$(ifconfig eth1 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
+
+export FLANNEL_OPTS=" \
+  -etcd-endpoints=\"http://127.0.0.1:2379\" \
+  -ip-masq \
+  -alsologtostderr=true \
+  -log_dir="/vagrant/flanneld/logs/${HOSTNAME}" \
+  -logtostderr=false \
+  -public-ip="${IP}" \
+  -v=4 \
+  -iface=eth1 "
